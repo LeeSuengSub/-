@@ -6,6 +6,4 @@
 
 fdfd
 
-fffffff
-
 저장은 Ctrl+s
