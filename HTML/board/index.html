@@ -9,27 +9,32 @@
   </head>
   <body>
     <div class="container">
-      <div class="write-popup">
+      <!-- 글 작성 수정 -->
+      <div class="update-popup">
         <div class="editor">
-          <div class="input-box">
-            <label for="studentsName">작성자 : </label>
-            <input id="studentsName" type="text" value="현상원" readonly />
+          <div class="close">
+            <a href="#" class="btn-close">닫기</a>
           </div>
           <div class="input-box">
             <label for="title">제목 : </label>
-            <input id="title" type="text" placeholder="제목을 입력하세요..." />
+            <input
+              id="upt-title"
+              type="text"
+              placeholder="제목을 입력하세요..."
+            />
           </div>
           <div class="input-box">
             <textarea
-              id="content"
+              id="upt-content"
               rows="10"
               cols="65"
               placeholder="내용을 간단히 적어주세요..."
             ></textarea>
           </div>
           <div class="btn-area">
-            <a href="#" class="btn-cancel">취소</a>
-            <a id="contentSubmit" href="#" class="btn-success">등록</a>
+            <input id="boardIdHidden" type="hidden" />
+            <a id="contentUpdate" href="#" class="btn-update">수정</a>
+            <a id="contentDelete" href="#" class="btn-delete">삭제</a>
           </div>
         </div>
       </div>
@@ -305,5 +310,93 @@
         },
       });
     }
+    function getBoard(boardId) {
+      console.log(boardId);
+      $(".update-popup").css("display", "block");
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "Get",
+        dataType: "json",
+        success: (response) => {
+          //3. input에 데이터 set해주기
+          $("#upt-title").val(response.title);
+          $("#upt-content").val(response.content);
+          $("#boardIdHidden").val(boardId);
+          setBoardViews(boardId); //조회수 함수
+        },
+      });
+    }
+
+    //게시물 수정
+    $("#contentUpdate").click(function () {
+      let boardId = $("#boardIdHidden").val();
+      let title = $("#upt-title").val();
+      let content = $("#upt-content").val();
+
+      if (title == "" || content == "") {
+        alert("다시 작성해주세요");
+        return false;
+      }
+
+      var jsondata = {
+        boardId: boardId,
+        title: title,
+        content: content,
+      };
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "PATCH",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(jsondata),
+        success: (response) => {
+          if (response > 0) {
+            alert("수정 완료");
+            $(".update-popup").css("display", "none"); // 게시물 상세 화면 감추기
+          }
+        },
+      });
+    });
+
+    //게시물 삭제
+    $("#contentDelete").click(function () {
+      let boardId = $("#boardIdHidden").val();
+
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "DELETE",
+        dataType: "json",
+        success: (response) => {
+          if (response > 0) {
+            alert("삭제 완료");
+            $("tbody").children().remove();
+            getBoardList();
+            $(".update-popup").css("display", "none"); // 게시물 상세 화면 감추기
+          }
+        },
+      });
+    });
+
+    //조회수
+    function setBoardViews(boardId) {
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/views/boardId/" + boardId,
+        type: "PATCH",
+        dataType: "json",
+        success: (response) => {
+          if (response > 0) {
+            $("tbody").children().remove();
+            getBoardList();
+          }
+        },
+      });
+    }
+
+    $("#searchBar").keyup(function (key) {
+      if (key.keyCode == 13) {
+        let search = $("#searchBar").val();
+        console.log(search);
+      }
+    });
   </script>
 </html>
