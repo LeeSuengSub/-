@@ -223,6 +223,9 @@
     $(".btn-cancel").click(function () {
       $(".write-popup").css("display", "none");
     });
+    $(".btn-close").click(function () {
+      $(".update-popup").css("display", "none");
+    });
 
     let list = document.querySelectorAll(".navigation li");
     function activeLink() {
@@ -239,7 +242,7 @@
     $("#contentSubmit").click(function () {
       let title = $("#title").val();
       let content = $("#content").val();
-      let studentsId = 9;
+      let studentsId = 1;
 
       if (title == "") {
         alert("제목을 작성해주세요");
@@ -269,6 +272,7 @@
             $("#title").val("");
             $("#content").val("");
             $("#tbody").children().remove();
+            getBoardList();
           }
         },
       });
