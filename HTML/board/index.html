@@ -292,9 +292,9 @@
           if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
               list +=
-                "<tr><td>" +
+                "<tr onclick=getBoard(" +
                 data[i].boardId +
-                "</td><td>" +
+                ") </td><td>" +
                 data[i].students_name +
                 "</td><td>" +
                 data[i].title +
