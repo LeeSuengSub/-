@@ -9,6 +9,31 @@
   </head>
   <body>
     <div class="container">
+      <!-- 글 작성 팝업 -->
+      <div class="write-popup">
+        <div class="editor">
+          <div class="input-box">
+            <label for="studentsName">작성자 : </label>
+            <input id="studentsName" type="text" value="현상원" readonly />
+          </div>
+          <div class="input-box">
+            <label for="title">제목 : </label>
+            <input id="title" type="text" placeholder="제목을 입력하세요..." />
+          </div>
+          <div class="input-box">
+            <textarea
+              id="content"
+              rows="10"
+              cols="65"
+              placeholder="내용을 간단히 적어주세요..."
+            ></textarea>
+          </div>
+          <div class="btn-area">
+            <a href="#" class="btn-cancel">취소</a>
+            <a id="contentSubmit" href="#" class="btn-success">등록</a>
+          </div>
+        </div>
+      </div>
       <!-- 글 작성 수정 -->
       <div class="update-popup">
         <div class="editor">
