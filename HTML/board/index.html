@@ -116,7 +116,11 @@
         <!-- search -->
         <div class="search">
           <label>
-            <input type="text" placeholder="작성자를 검색하세요..." />
+            <input
+              id="searchBar"
+              type="text"
+              placeholder="작성자를 검색하세요..."
+            />
           </label>
         </div>
         <div>
@@ -127,7 +131,7 @@
       <div class="cardBox">
         <div class="card">
           <div>
-            <div class="numbers">1,400</div>
+            <div id="boardCnt" class="numbers">1,400</div>
             <div class="cardName">학생 수</div>
           </div>
           <div class="iconBx">
@@ -136,7 +140,7 @@
         </div>
         <div class="card">
           <div>
-            <div class="numbers">500</div>
+            <div id="studentsCnt" class="numbers">500</div>
             <div class="cardName">게시글 수</div>
           </div>
           <div class="iconBx">
@@ -145,7 +149,7 @@
         </div>
         <div class="card">
           <div>
-            <div class="numbers">300</div>
+            <div id="writerCnt" class="numbers">300</div>
             <div class="cardName">작성자 수</div>
           </div>
           <div class="iconBx">
@@ -154,7 +158,7 @@
         </div>
         <div class="card">
           <div>
-            <div class="numbers">2,800</div>
+            <div id="viewsCnt" class="numbers">2,800</div>
             <div class="cardName">총 조회 수</div>
           </div>
           <div class="iconBx">
@@ -296,46 +300,103 @@
             $(".write-popup").css("display", "none");
             $("#title").val("");
             $("#content").val("");
-            $("#tbody").children().remove();
-            getBoardList();
+            // $("#tbody").children().remove();
+            // getBoardList(1, 10);
+            location.reload();
           }
         },
       });
     });
   </script>
   <script>
-    getBoardList();
+    getBoardList(1, 10);
+    getBoardStatistics();
 
-    function getBoardList() {
+    function getBoardStatistics() {
       $.ajax({
-        url: "http://localhost:8080/api/v1/board",
+        url: "http://localhost:8080/api/v1/board/Statistics",
+        type: "GET",
+        dataType: "json",
+        success: (data) => {
+          $("#boardCnt").text(data.boardCnt);
+          $("#studentsCnt").text(data.studentsCnt);
+          $("#writerCnt").text(data.writerCnt);
+          $("#viewsCnt").text(data.viewsCnt);
+        },
+      });
+    }
+
+    function getBoardList(pageNum, pageSize) {
+      $.ajax({
+        url:
+          "http://localhost:8080/api/v1/board?pageNum=" +
+          pageNum +
+          "&pageSize=" +
+          pageSize,
         type: "Get",
         dataType: "json",
         success: (data) => {
           console.log(data);
-          let list = "";
-          if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-              list +=
+          let html = "";
+          if (data.list.length > 0) {
+            for (let i = 0; i < data.list.length; i++) {
+              html +=
                 "<tr onclick=getBoard(" +
-                data[i].boardId +
-                ") </td><td>" +
-                data[i].students_name +
+                data.list[i].boardId +
+                ") ><td>" +
+                data.list[i].boardId +
                 "</td><td>" +
-                data[i].title +
+                data.list[i].students_name +
                 "</td><td>" +
-                data[i].updateAt +
+                data.list[i].title +
                 "</td><td>" +
-                data[i].createAt +
-                "</td><td><span class='row'>" +
-                0 +
+                data.list[i].updateAt +
+                "</td><td>" +
+                data.list[i].createAt +
+                '</td><td><span class="row">' +
+                data.list[i].cnt +
                 "</span></td></tr>";
             }
+            let paginationHtml = "";
+            if (data.hasPreviousPage) {
+              paginationHtml +=
+                '<a onclick="getBoardList(' +
+                (data.pageNum - 1) +
+                "," +
+                pageSize +
+                ')" href="#">Previous</a>';
+            }
+            for (let i = 0; i < data.navigatepageNums.length; i++) {
+              paginationHtml +=
+                '<a id="pageNum' +
+                data.navigatepageNums[i] +
+                '" onclick="getBoardList(' +
+                data.navigatepageNums[i] +
+                "," +
+                pageSize +
+                ')" href="#">' +
+                data.navigatepageNums[i] +
+                "</a>";
+            }
+            if (data.hasNextPage) {
+              paginationHtml +=
+                '<a onclick="getBoardList(' +
+                (data.pageNum + 1) +
+                "," +
+                pageSize +
+                ')" href="#">Next</a>';
+            }
+            $(".pagination").children().remove();
+            $(".pagination").append(paginationHtml);
+
+            $("#pageNum" + pageNum).css("backgroundColor", "#287bff");
+            $("#pageNum" + pageNum).css("color", "#fff");
           } else {
-            list +=
+            html +=
               '<tr><td colspan=6 style="text-align:center">게시판이 없습니다.</td></tr>';
           }
-          $("tbody").append(list);
+          $("tbody").children().remove();
+          $("tbody").append(html);
         },
       });
     }
@@ -399,7 +460,7 @@
           if (response > 0) {
             alert("삭제 완료");
             $("tbody").children().remove();
-            getBoardList();
+            getBoardList(1, 10);
             $(".update-popup").css("display", "none"); // 게시물 상세 화면 감추기
           }
         },
@@ -415,17 +476,99 @@
         success: (response) => {
           if (response > 0) {
             $("tbody").children().remove();
-            getBoardList();
+            getBoardList(1, 10);
           }
         },
       });
     }
 
-    $("#searchBar").keyup(function (key) {
-      if (key.keyCode == 13) {
-        let search = $("#searchBar").val();
-        console.log(search);
-      }
-    });
+    //검색 페이징 구현
+    getBoardSearchWord(1, 8);
+    function getBoardSearchWord(pageNum, pageSize) {
+      $("#searchBar").keyup(function (key) {
+        if (key.keyCode == 13) {
+          let search = $("#searchBar").val();
+          console.log(search);
+          getSearchWord(1, 8);
+        }
+      });
+    }
+    function getSearchWord(pageNum, pageSize) {
+      let search = $("#searchBar").val();
+      $.ajax({
+        url:
+          "http://localhost:8080/api/v1/board/search?writer=" +
+          search +
+          "&pageNum=" +
+          pageNum +
+          "&pageSize=" +
+          pageSize,
+        type: "Get",
+        dataType: "json",
+        success: (data) => {
+          console.log(data);
+          let html = "";
+          if (data.list.length > 0) {
+            for (let i = 0; i < data.list.length; i++) {
+              html +=
+                '<tr onclick="getBoardList(' +
+                data.list[i].boardId +
+                ')"><td>' +
+                data.list[i].boardId +
+                "</td><td>" +
+                data.list[i].students_name +
+                "</td><td>" +
+                data.list[i].title +
+                "</td><td>" +
+                data.list[i].updateAt +
+                "</td><td>" +
+                data.list[i].createAt +
+                '</td><td><span class="row">' +
+                data.list[i].cnt +
+                "</span></td></tr>";
+            }
+            let paginationHtml = "";
+            if (data.hasPreviousPage) {
+              paginationHtml +=
+                '<a onclick="getBoardSearchWord(' +
+                (data.pageNum - 1) +
+                "," +
+                pageSize +
+                ')" href="#">Previous</a>';
+            }
+            for (let i = 0; i < data.navigatepageNums.length; i++) {
+              paginationHtml +=
+                '<a id="Num' +
+                data.navigatepageNums[i] +
+                '" onclick="getBoardSearchWord(' +
+                data.navigatepageNums[i] +
+                "," +
+                pageSize +
+                ')" href="#">' +
+                data.navigatepageNums[i] +
+                "</a>";
+            }
+            if (data.hasNextPage) {
+              paginationHtml +=
+                '<a onclick="getBoardSearchWord(' +
+                (data.pageNum + 1) +
+                "," +
+                pageSize +
+                ')" href="#">Next</a>';
+            }
+            $(".pagination").children().remove();
+            $(".pagination").append(paginationHtml);
+
+            $("#Num" + pageNum).css("backgroundColor", "#287bff");
+            $("#Num" + pageNum).css("color", "#fff");
+          } else {
+            html +=
+              '<tr><td colspan=6 style="text-align:center">게시글이 없습니다.</td></tr>';
+          }
+          $("tbody").children().remove();
+          $("tbody").append(html);
+        },
+      });
+    }
   </script>
 </html>
