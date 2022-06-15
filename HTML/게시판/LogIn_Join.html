@@ -26,7 +26,7 @@
             placeholder="비밀번호 재확인"
             type="password"
           />
-          <button type="button">가입하기</button>
+          <button type="button" onclick="join()">가입하기</button>
         </div>
       </div>
     </div>
@@ -57,21 +57,25 @@
         $(".write-popup").css("display", "block");
         $(".container").css("display", "none");
       });
+
       $(".close i").click(function () {
         $(".write-popup").css("display", "none");
         $(".container").css("display", "block");
       });
 
-      $("#loginbtn").click((response) => {
+      //로그인 구현
+      $("#loginbtn").click(function () {
         let userId = $("#userId").val();
-        let userPassword = $("#userPassword").val();
+        let userPassword = $("userPassword").val();
 
         if (userId == "") {
-          alert("아이디를 입력해주세요");
+          alert("아이디를 입력해주세요.");
+          $("#userId").focus();
           return false;
         }
         if (userPassword == "") {
-          alert("비밀번호를 입력해주세요");
+          alert("비밀번호를 입력해주세요.");
+          $("#userPassword").focus();
           return false;
         }
 
@@ -86,16 +90,52 @@
           contentType: "application/json",
           dataType: "json",
           data: JSON.stringify(jsonData),
-          success: (data) => {
-            console.log(data);
-            if (data) {
+          success: (response) => {
+            // console.log(response);
+            if (response) {
               location.href = "./board.html";
             } else {
-              alert("이름 혹은 비밀번호가 틀렸습니다.");
+              alert("아이디혹은 비밀번호가 틀렸습니다.");
             }
           },
         });
       });
+
+      //회원가입 구현
+      function join() {
+        let userName = $("#userName").val();
+        let password = $("#password").val();
+        let rePassword = $("#rePassword").val();
+
+        if (password == "" || rePassword == "" || userName == "") {
+          alert("양식에 맞게 작성해주세요.");
+          return 0;
+        }
+        if (password !== rePassword) {
+          alert("비밀번호가 다릅니다.");
+          $("#rePassword").focus();
+          return 0;
+        }
+        let jsonData = {
+          studentsName: userName,
+          studentsPassword: rePassword,
+        };
+        $.ajax({
+          url: "http://localhost:8080/api/v1/students",
+          type: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify(jsonData),
+          success: (response) => {
+            console.log(response);
+            if (response > 0) {
+              alert("회원가입이 완료되었습니다.");
+              $(".write-popup").css("display", "none");
+              $(".container").css("display", "block");
+            }
+          },
+        });
+      }
     </script>
   </body>
 </html>
