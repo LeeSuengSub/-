@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/7f3a427fdf.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>게시판 로그인</title>
+  </head>
+  <body>
+    <div class="write-popup">
+      <div class="editor">
+        <div class="close">
+          <i class="fa-solid fa-x"></i>
+        </div>
+        <div class="input-box">
+          <h1>회원가입</h1>
+          <input id="userName" placeholder="이름" type="text" />
+          <input id="password" placeholder="비밀번호" type="password" />
+          <input
+            id="rePassword"
+            placeholder="비밀번호 재확인"
+            type="password"
+          />
+          <button type="button">가입하기</button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h1>Login</h1>
+      <div class="login-form">
+        <div class="txt-field">
+          <input id="userId" type="text" required />
+          <label>이름</label>
+        </div>
+        <div class="txt-field">
+          <input id="userPassword" type="password" required />
+          <label>비밀번호</label>
+        </div>
+        <input class="login-btn" id="loginbtn" type="butten" value="로그인" />
+        <div class="signup-link">회원이 아닌가요? <a href="#">회원가입</a></div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(".write-popup").css("display", "none");
+
+      $(".signup-link a").click(function () {
+        $(".write-popup").css("display", "block");
+        $(".container").css("display", "none");
+      });
+      $(".close i").click(function () {
+        $(".write-popup").css("display", "none");
+        $(".container").css("display", "block");
+      });
+
+      $("#loginbtn").click((response) => {
+        let userId = $("#userId").val();
+        let userPassword = $("#userPassword").val();
+
+        if (userId == "") {
+          alert("아이디를 입력해주세요");
+          return false;
+        }
+        if (userPassword == "") {
+          alert("비밀번호를 입력해주세요");
+          return false;
+        }
+
+        let jsonData = {
+          studentsName: userId,
+          studentsPassword: userPassword,
+        };
+
+        $.ajax({
+          url: "http://localhost:8080/api/v1/login",
+          type: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify(jsonData),
+          success: (data) => {
+            console.log(data);
+            if (data) {
+              location.href = "./board.html";
+            } else {
+              alert("이름 혹은 비밀번호가 틀렸습니다.");
+            }
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

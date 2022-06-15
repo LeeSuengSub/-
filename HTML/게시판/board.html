@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- 글 작성 팝업 -->
+      <div class="write-popup">
+        <div class="editor">
+          <div class="input-box">
+            <label for="studentsName">작성자 : </label>
+            <input id="studentsName" type="text" value="현상원" readonly />
+          </div>
+          <div class="input-box">
+            <label for="title">제목 : </label>
+            <input id="title" type="text" placeholder="제목을 입력하세요..." />
+          </div>
+          <div class="input-box">
+            <textarea
+              id="content"
+              rows="10"
+              cols="65"
+              placeholder="내용을 간단히 적어주세요..."
+            ></textarea>
+          </div>
+          <div class="btn-area">
+            <a href="#" class="btn-cancel">취소</a>
+            <a id="contentSubmit" href="#" class="btn-success">등록</a>
+          </div>
+        </div>
+      </div>
+      <!-- 글 작성 수정 -->
+      <div class="update-popup">
+        <div class="editor">
+          <div class="close">
+            <a href="#" class="btn-close">닫기</a>
+          </div>
+          <div class="input-box">
+            <label for="title">제목 : </label>
+            <input
+              id="upt-title"
+              type="text"
+              placeholder="제목을 입력하세요..."
+            />
+          </div>
+          <div class="input-box">
+            <textarea
+              id="upt-content"
+              rows="10"
+              cols="65"
+              placeholder="내용을 간단히 적어주세요..."
+            ></textarea>
+          </div>
+          <div class="btn-area">
+            <input id="boardIdHidden" type="hidden" />
+            <a id="contentUpdate" href="#" class="btn-update">수정</a>
+            <a id="contentDelete" href="#" class="btn-delete">삭제</a>
+          </div>
+        </div>
+      </div>
+      <div class="navigation">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="icon"><ion-icon name="logo-apple"></ion-icon></span>
+              <span class="title">Board</span>
+            </a>
+          </li>
+          <li>
+            <a href="./board.html">
+              <span class="icon"
+                ><ion-icon name="home-outline"></ion-icon
+              ></span>
+              <span class="title">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="./Member.html">
+              <span class="icon"
+                ><ion-icon name="person-outline"></ion-icon
+              ></span>
+              <span class="title">Member Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="./Notice.html">
+              <span class="icon"
+                ><ion-icon name="warning-outline"></ion-icon
+              ></span>
+              <span class="title">Notice</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="icon"
+                ><ion-icon name="log-out-outline"></ion-icon
+              ></span>
+              <span class="title">Log Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- main -->
+    <div class="main">
+      <!-- table -->
+      <div class="details">
+        <div class="recentOrders">
+          <div class="cardHeader">
+            <h2>Board List</h2>
+            <div class="search">
+              <label>
+                <input
+                  id="searchBar"
+                  type="text"
+                  placeholder="작성자를 검색하세요..."
+                />
+              </label>
+            </div>
+            <a href="./writer_page.html" class="btn">글 작성</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>게시판 번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>수정 날짜</th>
+                <th>작성 날짜</th>
+                <th>조회 수</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>이승섭</td>
+                <td>점심시간이 너무 짧아요!</td>
+                <td>2022-05-19</td>
+                <td>2022-06-15</td>
+                <td><span class="high">8320</span></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>이승섭</td>
+                <td>학원에 커피기계가 없어요!</td>
+                <td>2022-05-19</td>
+                <td>2022-06-15</td>
+                <td><span class="middle">1200</span></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>이승섭</td>
+                <td>너무 졸려요...</td>
+                <td>2022-05-19</td>
+                <td>2022-06-15</td>
+                <td><span class="row">5</span></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>이승섭</td>
+                <td>안녕하세요!</td>
+                <td>2022-05-19</td>
+                <td>2022-06-15</td>
+                <td><span class="row">22</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">
+            <a href="#">Previous</a>
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">Next</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+  ></script>
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+  ></script>
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    // $(".btn").click(function () {
+    //   $(".write-popup").css("display", "block");
+    // });
+    // $(".btn-cancel").click(function () {
+    //   $(".write-popup").css("display", "none");
+    // });
+    // $(".btn-close").click(function () {
+    //   $(".update-popup").css("display", "none");
+    // });
+
+    let list = document.querySelectorAll(".navigation li");
+    function activeLink() {
+      list.forEach((item) => {
+        item.classList.remove("hovered");
+      });
+      this.classList.add("hovered");
+    }
+    list.forEach((item) => {
+      item.addEventListener("mouseover", activeLink);
+    });
+  </script>
+  <script>
+    $("#contentSubmit").click(function () {
+      let title = $("#title").val();
+      let content = $("#content").val();
+      let studentsId = 1;
+
+      if (title == "") {
+        alert("제목을 작성해주세요");
+        return false;
+      }
+      if (content == "") {
+        alert("내용을 입력해주세요");
+        return false;
+      }
+
+      let jsonData = {
+        title: title,
+        content: content,
+        studentsId: studentsId,
+      };
+
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board",
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(jsonData),
+        success: (response) => {
+          console.log(response);
+          if (response > 0) {
+            $(".write-popup").css("display", "none");
+            $("#title").val("");
+            $("#content").val("");
+            // $("#tbody").children().remove();
+            // getBoardList(1, 10);
+            location.reload();
+          }
+        },
+      });
+    });
+  </script>
+  <script>
+    getBoardList(1, 10);
+    getBoardStatistics();
+
+    function getBoardStatistics() {
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/Statistics",
+        type: "GET",
+        dataType: "json",
+        success: (data) => {
+          $("#boardCnt").text(data.boardCnt);
+          $("#studentsCnt").text(data.studentsCnt);
+          $("#writerCnt").text(data.writerCnt);
+          $("#viewsCnt").text(data.viewsCnt);
+        },
+      });
+    }
+
+    function getBoardList(pageNum, pageSize) {
+      $.ajax({
+        url:
+          "http://localhost:8080/api/v1/board?pageNum=" +
+          pageNum +
+          "&pageSize=" +
+          pageSize,
+        type: "Get",
+        dataType: "json",
+        success: (data) => {
+          console.log(data);
+          let html = "";
+          if (data.list.length > 0) {
+            for (let i = 0; i < data.list.length; i++) {
+              html +=
+                "<tr onclick=getBoard(" +
+                data.list[i].boardId +
+                ") ><td>" +
+                data.list[i].boardId +
+                "</td><td>" +
+                data.list[i].students_name +
+                "</td><td>" +
+                data.list[i].title +
+                "</td><td>" +
+                data.list[i].updateAt +
+                "</td><td>" +
+                data.list[i].createAt +
+                '</td><td><span class="row">' +
+                data.list[i].cnt +
+                "</span></td></tr>";
+            }
+            let paginationHtml = "";
+            if (data.hasPreviousPage) {
+              paginationHtml +=
+                '<a onclick="getBoardList(' +
+                (data.pageNum - 1) +
+                "," +
+                pageSize +
+                ')" href="#">Previous</a>';
+            }
+            for (let i = 0; i < data.navigatepageNums.length; i++) {
+              paginationHtml +=
+                '<a id="pageNum' +
+                data.navigatepageNums[i] +
+                '" onclick="getBoardList(' +
+                data.navigatepageNums[i] +
+                "," +
+                pageSize +
+                ')" href="#">' +
+                data.navigatepageNums[i] +
+                "</a>";
+            }
+            if (data.hasNextPage) {
+              paginationHtml +=
+                '<a onclick="getBoardList(' +
+                (data.pageNum + 1) +
+                "," +
+                pageSize +
+                ')" href="#">Next</a>';
+            }
+            $(".pagination").children().remove();
+            $(".pagination").append(paginationHtml);
+
+            $("#pageNum" + pageNum).css("backgroundColor", "#287bff");
+            $("#pageNum" + pageNum).css("color", "#fff");
+          } else {
+            html +=
+              '<tr><td colspan=6 style="text-align:center">게시판이 없습니다.</td></tr>';
+          }
+          $("tbody").children().remove();
+          $("tbody").append(html);
+        },
+      });
+    }
+    function getBoard(boardId) {
+      console.log(boardId);
+      $(".update-popup").css("display", "block");
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "Get",
+        dataType: "json",
+        success: (response) => {
+          //3. input에 데이터 set해주기
+          $("#upt-title").val(response.title);
+          $("#upt-content").val(response.content);
+          $("#boardIdHidden").val(boardId);
+          setBoardViews(boardId); //조회수 함수
+        },
+      });
+    }
+
+    //게시물 수정
+    $("#contentUpdate").click(function () {
+      let boardId = $("#boardIdHidden").val();
+      let title = $("#upt-title").val();
+      let content = $("#upt-content").val();
+
+      if (title == "" || content == "") {
+        alert("다시 작성해주세요");
+        return false;
+      }
+
+      var jsondata = {
+        boardId: boardId,
+        title: title,
+        content: content,
+      };
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "PATCH",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(jsondata),
+        success: (response) => {
+          if (response > 0) {
+            alert("수정 완료");
+            $(".update-popup").css("display", "none"); // 게시물 상세 화면 감추기
+          }
+        },
+      });
+    });
+
+    //게시물 삭제
+    $("#contentDelete").click(function () {
+      let boardId = $("#boardIdHidden").val();
+
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
+        type: "DELETE",
+        dataType: "json",
+        success: (response) => {
+          if (response > 0) {
+            alert("삭제 완료");
+            $("tbody").children().remove();
+            getBoardList(1, 10);
+            $(".update-popup").css("display", "none"); // 게시물 상세 화면 감추기
+          }
+        },
+      });
+    });
+
+    //조회수
+    function setBoardViews(boardId) {
+      $.ajax({
+        url: "http://localhost:8080/api/v1/board/views/boardId/" + boardId,
+        type: "PATCH",
+        dataType: "json",
+        success: (response) => {
+          if (response > 0) {
+            $("tbody").children().remove();
+            getBoardList(1, 10);
+          }
+        },
+      });
+    }
+
+    //검색 페이징 구현
+    getBoardSearchWord(1, 8);
+    function getBoardSearchWord(pageNum, pageSize) {
+      $("#searchBar").keyup(function (key) {
+        if (key.keyCode == 13) {
+          let search = $("#searchBar").val();
+          console.log(search);
+          getSearchWord(1, 8);
+        }
+      });
+    }
+    function getSearchWord(pageNum, pageSize) {
+      let search = $("#searchBar").val();
+      $.ajax({
+        url:
+          "http://localhost:8080/api/v1/board/search?writer=" +
+          search +
+          "&pageNum=" +
+          pageNum +
+          "&pageSize=" +
+          pageSize,
+        type: "Get",
+        dataType: "json",
+        success: (data) => {
+          console.log(data);
+          let html = "";
+          if (data.list.length > 0) {
+            for (let i = 0; i < data.list.length; i++) {
+              html +=
+                '<tr onclick="getBoardList(' +
+                data.list[i].boardId +
+                ')"><td>' +
+                data.list[i].boardId +
+                "</td><td>" +
+                data.list[i].students_name +
+                "</td><td>" +
+                data.list[i].title +
+                "</td><td>" +
+                data.list[i].updateAt +
+                "</td><td>" +
+                data.list[i].createAt +
+                '</td><td><span class="row">' +
+                data.list[i].cnt +
+                "</span></td></tr>";
+            }
+            let paginationHtml = "";
+            if (data.hasPreviousPage) {
+              paginationHtml +=
+                '<a onclick="getBoardSearchWord(' +
+                (data.pageNum - 1) +
+                "," +
+                pageSize +
+                ')" href="#">Previous</a>';
+            }
+            for (let i = 0; i < data.navigatepageNums.length; i++) {
+              paginationHtml +=
+                '<a id="Num' +
+                data.navigatepageNums[i] +
+                '" onclick="getBoardSearchWord(' +
+                data.navigatepageNums[i] +
+                "," +
+                pageSize +
+                ')" href="#">' +
+                data.navigatepageNums[i] +
+                "</a>";
+            }
+            if (data.hasNextPage) {
+              paginationHtml +=
+                '<a onclick="getBoardSearchWord(' +
+                (data.pageNum + 1) +
+                "," +
+                pageSize +
+                ')" href="#">Next</a>';
+            }
+            $(".pagination").children().remove();
+            $(".pagination").append(paginationHtml);
+
+            $("#Num" + pageNum).css("backgroundColor", "#287bff");
+            $("#Num" + pageNum).css("color", "#fff");
+          } else {
+            html +=
+              '<tr><td colspan=6 style="text-align:center">게시글이 없습니다.</td></tr>';
+          }
+          $("tbody").children().remove();
+          $("tbody").append(html);
+        },
+      });
+    }
+  </script>
+</html>
