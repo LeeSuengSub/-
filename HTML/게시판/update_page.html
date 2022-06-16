@@ -9,42 +9,6 @@
   </head>
   <body>
     <div class="container">
-      <div class="update-popup">
-        <div class="editor">
-          <div class="close">
-            <a href="#" class="btn-close">닫기</a>
-          </div>
-          <div class="input-box">
-            <label for="studentsId">학생 아이디 : </label>
-            <input
-              id="studentsId"
-              type="text"
-              placeholder="아이디 입력하세요..."
-            />
-          </div>
-          <div class="input-box">
-            <label for="studentsName">학생 이름 : </label>
-            <input
-              id="studentsName"
-              type="text"
-              placeholder="이름을 입력하세요..."
-            />
-          </div>
-          <div class="input-box">
-            <label for="studentsPassword">학생 비밀번호 : </label>
-            <input
-              id="studentsPassword"
-              type="text"
-              placeholder="이름을 입력하세요..."
-            />
-          </div>
-          <div class="btn-area">
-            <input id="boardIdHidden" type="hidden" />
-            <a id="contentUpdate" href="#" class="btn-update">수정</a>
-            <a id="contentDelete" href="#" class="btn-delete">삭제</a>
-          </div>
-        </div>
-      </div>
       <div class="navigation">
         <ul>
           <li>
@@ -54,14 +18,15 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <input id="boardIdHidden" type="hidden" />
+            <a id="contentUpdate" href="#">
               <span class="icon"
                 ><ion-icon name="reader-outline"></ion-icon></span>
               <span class="title">수정</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a id="contentDelete" href="#">
               <span class="icon"
                 ><ion-icon name="trash-outline"></ion-icon></span>
               <span class="title">삭제</span>
@@ -123,5 +88,55 @@
       item.addEventListener("mouseover", activeLink);
     });
   </script>
-  
+  <script>
+        //게시물 수정하는 함수
+        $('#contentUpdate').click(function () {
+      //1. 게시판 번호 확인
+      var boardId = $('#boardIdHidden').val(); // hidden에 숨겨둔 boardId 가져오기
+      //2. json 생성
+      var title = $('#board-title').val();
+      var content = $('#update-content').val();
+
+      if (title == '' || content == '') {
+        alert('공백은 안되요.');
+        return false;
+      }
+
+      var jsondata = {
+        boardId: boardId,
+        title: title,
+        content: content,
+      };
+      $.ajax({
+        url: 'http://localhost:8080/api/v1/board/boardId/' + boardId,
+        type: 'PATCH',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(jsondata),
+        success: (response) => {
+          if (response > 0) {
+            alert('수정 완료');
+            history.go(-1);
+          }
+        },
+      });
+    });
+
+    //게시물 삭제하는 함수
+    $('#contentDelete').click(function () {
+      let boardId = $('#boardIdHidden').val();
+
+      $.ajax({
+        url: 'http://localhost:8080/api/v1/board/boardId/' + boardId,
+        type: 'DELETE',
+        dataType: 'json',
+        success: (response) => {
+          if (response > 0) {
+            alert('삭제 완료');
+            history.go(-1);
+          }
+        },
+      });
+    });
+  </script>
 </html>

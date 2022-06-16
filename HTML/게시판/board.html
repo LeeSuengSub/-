@@ -413,5 +413,143 @@
         },
       });
     }
+
+    $("#searchBar").keyup(function (key) {
+      //엔터를 누를 때 'hello World'를 출력하고 싶음
+      //13은 엔터를 의미
+      var pageNum = 1;
+      var pageSize = 10;
+      if (key.keyCode == 13) {
+        //1. input값을 가져옴.
+        var search = $("#searchBar").val().trim(); //input에 작성한 작성자를 가져옴.
+        if (search != "") {
+          $("#keyword").val(search); // hidden 태그에 내가 검색한 키워드를 value에 set함
+        }
+        console.log(search);
+
+        //2. AJAX 호출
+        $.ajax({
+          url:
+            "http://localhost:8080/api/v1/board/search?writer=" +
+            search +
+            "&pageNum=" +
+            pageNum +
+            "&pageSize=" +
+            pageSize,
+          type: "Get",
+          dataType: "json",
+          success: (data) => {
+            console.log(data);
+            //html append 작성
+            var html = "";
+            var len = data.list.length;
+            if (len > 0) {
+              for (var i = 0; i < len; i++) {
+                var views = data.list[i].cnt;
+                if (views < 10) {
+                  //crtl + shift + H => 전체 replace
+                  html +=
+                    "<tr onclick=getBoard(" +
+                    data.list[i].boardId +
+                    ") ><td>" +
+                    data.list[i].boardId +
+                    "</td><td>" +
+                    data.list[i].students_name +
+                    "</td><td>" +
+                    data.list[i].title +
+                    "</td><td>" +
+                    data.list[i].updateAt +
+                    "</td><td>" +
+                    data.list[i].createAt +
+                    '</td><td><span class="row">' +
+                    data.list[i].cnt +
+                    "</span></td></tr>";
+                }
+                if (views >= 10 && views < 20) {
+                  html +=
+                    "<tr onclick=getBoard(" +
+                    data.list[i].boardId +
+                    ") ><td>" +
+                    data.list[i].boardId +
+                    "</td><td>" +
+                    data.list[i].students_name +
+                    "</td><td>" +
+                    data.list[i].title +
+                    "</td><td>" +
+                    data.list[i].updateAt +
+                    "</td><td>" +
+                    data.list[i].createAt +
+                    '</td><td><span class="middle">' +
+                    data.list[i].cnt +
+                    "</span></td></tr>";
+                }
+                if (views >= 20) {
+                  html +=
+                    "<tr onclick=getBoard(" +
+                    data.list[i].boardId +
+                    ") ><td>" +
+                    data.list[i].boardId +
+                    "</td><td>" +
+                    data.list[i].students_name +
+                    "</td><td>" +
+                    data.list[i].title +
+                    "</td><td>" +
+                    data.list[i].updateAt +
+                    "</td><td>" +
+                    data.list[i].createAt +
+                    '</td><td><span class="high">' +
+                    data.list[i].cnt +
+                    "</span></td></tr>";
+                }
+              }
+              //페이징 화면 구현
+              var paginationHtml = "";
+              if (data.hasPreviousPage) {
+                //이전 페이지가 true라면
+                paginationHtml +=
+                  '<a onclick="getBoardList(' +
+                  (data.pageNum - 1) +
+                  "," +
+                  pageSize +
+                  ')" href="#">Previous</a>';
+              }
+              for (var i = 0; i < data.navigatepageNums.length; i++) {
+                // 페이지 번호 길이 만큼 for문 실행
+                paginationHtml +=
+                  '<a id="pageNum' +
+                  data.navigatepageNums[i] +
+                  '" onclick="getBoardList(' +
+                  data.navigatepageNums[i] +
+                  "," +
+                  pageSize +
+                  ')" href="#">' +
+                  data.navigatepageNums[i] +
+                  "</a>";
+              }
+              if (data.hasNextPage) {
+                //다음 페이지가 true라면
+                paginationHtml +=
+                  '<a onclick="getBoardList(' +
+                  (data.pageNum + 1) +
+                  "," +
+                  pageSize +
+                  ')" href="#">Next</a>';
+              }
+              $(".pagination").children().remove();
+              $(".pagination").append(paginationHtml);
+
+              //페이지 번호에 맞게 css 수정
+              $("#pageNum" + pageNum).css("backgroundColor", "#287bff");
+              $("#pageNum" + pageNum).css("color", "#fff");
+            } else {
+              html +=
+                '<tr><td colspan=6 style="text-align:center">게시글이 없습니다.</td></tr>'; // colspan이 핵심
+            }
+            $("tbody").children().remove();
+            $("tbody").append(html);
+          },
+        });
+      }
+    });
   </script>
 </html>
