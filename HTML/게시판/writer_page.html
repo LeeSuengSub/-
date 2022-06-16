@@ -18,10 +18,10 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a id="save" href="#">
               <span class="icon"
                 ><ion-icon name="clipboard-outline"></ion-icon></span>
-              <span id="save" class="title">등록</span>
+              <span class="title">등록</span>
             </a>
           </li>
           <li id="cancel">
@@ -90,6 +90,42 @@
     })
 
     //게시판 작성
-    $("#")
+    $("#save").click(function(){
+      let title = $("#board-title").val();
+      let content = $("#ucontent").val();
+      let userId = $("#userNo").val(); // 수정해야함.
+
+      if(title == ''){
+        alert("제목을 입력해주세요.")
+        $("#board-title").focus();
+        return 0;
+      }
+      if(content == ''){
+        alert("내용을 작성해주세요.")
+        $("#ucontent").focus();
+        return 0;
+      }
+      let jsonData = {
+        title : title,
+        content : content,
+        userId : userId
+      }
+
+      $.ajax({
+        url : "http://localhost:8080/api/v1/board",
+        type : "POST",
+        contentType : "application/json",
+        dataType:"json",
+        data: JSON.stringify(jsonData),
+        success : (response) =>{
+          console.log(response);
+          if(response >0){
+            history.go(-1);
+            $("#board-title").val('');
+            $("#ucontent").val('');
+          }
+        }
+      })
+    })
   </script>
 </html>
