@@ -9,27 +9,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- 학생 정보 등록 -->
-      <div class="write-popup">
-        <div class="editor">
-          <div class="input-box">
-            <label for="studentsName">학생 이름 : </label>
-            <input id="Name" type="text" placeholder="이름을 입력하세요..." />
-          </div>
-          <div class="input-box">
-            <label for="Password">학생 비밀번호 : </label>
-            <input
-              id="Password"
-              type="text"
-              placeholder="이름을 입력하세요..."
-            />
-          </div>
-          <div class="btn-area">
-            <a href="#" class="btn-cancel">취소</a>
-            <a id="contentSubmit" href="#" class="btn-success">등록</a>
-          </div>
-        </div>
-      </div>
       <div class="update-popup">
         <div class="editor">
           <div class="close">
@@ -136,7 +115,7 @@
               </tr>
             </thead>
             <tbody id="boardData">
-              <tr>
+              <tr onclick="popup()">
                 <td>TEST1</td>
                 <td>TEST1</td>
                 <td>2022-06-15</td>
@@ -269,7 +248,7 @@
       });
     }
     //학생정보 불러오기
-    function getStudents(studentsId) {
+    function popup(TEST1) {
       console.log(studentsId);
       $(".update-popup").css("display", "block");
 
@@ -317,7 +296,7 @@
 
     //학생 삭제(탈퇴)
     $("#contentDelete").click(function () {
-      if (confirm("정말 탈퇴하시겠습니까?")) {
+      if (confirm("탈퇴하신 회원입니까?")) {
         let studentsId = $("#boardIdHidden").val();
 
         $.ajax({

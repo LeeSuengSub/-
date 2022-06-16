@@ -165,63 +165,7 @@
     });
   </script>
   <script>
-    $("#contentSubmit").click(function () {
-      let title = $("#title").val();
-      let content = $("#content").val();
-      let studentsId = 1;
-
-      if (title == "") {
-        alert("제목을 작성해주세요");
-        return false;
-      }
-      if (content == "") {
-        alert("내용을 입력해주세요");
-        return false;
-      }
-
-      let jsonData = {
-        title: title,
-        content: content,
-        studentsId: studentsId,
-      };
-
-      $.ajax({
-        url: "http://localhost:8080/api/v1/board",
-        type: "POST",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify(jsonData),
-        success: (response) => {
-          console.log(response);
-          if (response > 0) {
-            $(".write-popup").css("display", "none");
-            $("#title").val("");
-            $("#content").val("");
-            // $("#tbody").children().remove();
-            // getBoardList(1, 10);
-            location.reload();
-          }
-        },
-      });
-    });
-  </script>
-  <script>
     getBoardList(1, 10);
-    getBoardStatistics();
-
-    function getBoardStatistics() {
-      $.ajax({
-        url: "http://localhost:8080/api/v1/board/Statistics",
-        type: "GET",
-        dataType: "json",
-        success: (data) => {
-          $("#boardCnt").text(data.boardCnt);
-          $("#studentsCnt").text(data.studentsCnt);
-          $("#writerCnt").text(data.writerCnt);
-          $("#viewsCnt").text(data.viewsCnt);
-        },
-      });
-    }
 
     function getBoardList(pageNum, pageSize) {
       $.ajax({
@@ -297,9 +241,11 @@
         },
       });
     }
+
+    //클릭한 게시물 확인
     function getBoard(boardId) {
       console.log(boardId);
-      $(".update-popup").css("display", "block");
+      location.href = "./update_page.html";
       $.ajax({
         url: "http://localhost:8080/api/v1/board/boardId/" + boardId,
         type: "Get",
