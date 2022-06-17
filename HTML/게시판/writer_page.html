@@ -93,7 +93,7 @@
     $("#save").click(function(){
       let title = $("#board-title").val();
       let content = $("#ucontent").val();
-      let userId = $("#userNo").val(); // 수정해야함.
+      let userId = 10 // 수정해야함.
 
       if(title == ''){
         alert("제목을 입력해주세요.")
@@ -108,7 +108,7 @@
       let jsonData = {
         title : title,
         content : content,
-        userId : userId
+        studentsId : userId
       }
 
       $.ajax({
@@ -120,7 +120,7 @@
         success : (response) =>{
           console.log(response);
           if(response >0){
-            history.go(-1);
+            location.href="./board.html"
             $("#board-title").val('');
             $("#ucontent").val('');
           }
